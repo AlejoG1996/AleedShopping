@@ -5,12 +5,14 @@ using AleedTiendaShopping.Enums;
 using AleedTiendaShopping.Helpers;
 using AleedTiendaShopping.Models;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
+using Vereyon.Web;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace AleedTiendaShopping.Controllers
@@ -22,16 +24,18 @@ namespace AleedTiendaShopping.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IMailHelper _mailHelper;
+        private readonly IFlashMessage _flashMessage;
+
 
         public AccountController(IUserHelper userHelper, DataContext context, ICombosHelper combosHelper, IBlobHelper blobHelper,
-            IMailHelper mailHelper)
+            IMailHelper mailHelper, IFlashMessage flashMessage )
         {
             _userHelper = userHelper;
             _context = context;
             _combosHelper = combosHelper;
             _blobHelper = blobHelper;
             _mailHelper = mailHelper;
-
+            _flashMessage = flashMessage;
         }
 
 
@@ -58,16 +62,16 @@ namespace AleedTiendaShopping.Controllers
 
                 if (result.IsLockedOut)
                 {
-                    ModelState.AddModelError(string.Empty, "Ha superado el máximo número de intentos, su cuenta está bloqueada, intente de nuevo en 5 minutos.");
+                    _flashMessage.Danger(string.Empty, "Ha superado el máximo número de intentos, su cuenta está bloqueada, intente de nuevo en 5 minutos.");
                 }
                 else if (result.IsNotAllowed)
                 {
-                    ModelState.AddModelError(string.Empty, "El usuario no ha sido habilitado, debes de seguir las instrucciones del correo enviado para poder habilitar el usuario.");
+                    _flashMessage.Danger(string.Empty, "El usuario no ha sido habilitado, debes de seguir las instrucciones del correo enviado para poder habilitar el usuario.");
                 }
 
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Email o contraseña incorrectos.");
+                    _flashMessage.Danger(string.Empty, "Email o contraseña incorrectos.");
                 }
 
 
@@ -129,7 +133,7 @@ namespace AleedTiendaShopping.Controllers
 
                 if (!Regex.IsMatch(filename.ToLower(), @"^.*\.(jpg|gif|png|jpeg)$"))
                 {
-                    ModelState.AddModelError(string.Empty, "la imagen debe ser tipo .jpg .gift .png .jpeg");
+                    _flashMessage.Danger("La imagen debe ser tipo .jpg .gift .png .jpeg");
                     model.Countries = await _combosHelper.GetComboCountriesAsync();
                     model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
@@ -142,7 +146,8 @@ namespace AleedTiendaShopping.Controllers
            .FirstOrDefaultAsync(x => x.Document == model.Document);
                 if (usertwo != null)
                 {
-                    ModelState.AddModelError(string.Empty, "Documento de identidad ya esta registrado");
+                    _flashMessage.Danger("Documento de identidad ya esta registrado");
+
                     model.Countries = await _combosHelper.GetComboCountriesAsync();
                     model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
@@ -187,7 +192,7 @@ namespace AleedTiendaShopping.Controllers
                 User user = await _userHelper.AddUserAsync(model);
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Este correo ya está siendo usado.");
+                    _flashMessage.Danger("Este correo ya está siendo usado.");
                     model.Countries = await _combosHelper.GetComboCountriesAsync();
                     model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
@@ -211,11 +216,11 @@ namespace AleedTiendaShopping.Controllers
                         $"<hr></br></br><p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
                 if (response.IsSuccess)
                 {
-                    ViewBag.Message = "Las instrucciones para habilitar el usuario han sido enviadas al correo.";
+                    _flashMessage.Info("Usuario registrado. Para poder ingresar al sistema, siga las instrucciones que han sido enviadas a su correo.");
                     return View(model);
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
+                _flashMessage.Danger(string.Empty, response.Message);
             
 
 
@@ -315,7 +320,7 @@ namespace AleedTiendaShopping.Controllers
 
                 if (!Regex.IsMatch(filename.ToLower(), @"^.*\.(jpg|gif|png|jpeg)$"))
                 {
-                    ModelState.AddModelError(string.Empty, "la imagen debe ser tipo .jpg .gift .png .jpeg");
+                    _flashMessage.Danger("la imagen debe ser tipo .jpg .gift .png .jpeg");
                     model.Countries = await _combosHelper.GetComboCountriesAsync();
                     model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
@@ -333,7 +338,7 @@ namespace AleedTiendaShopping.Controllers
                    .FirstOrDefaultAsync(x => x.Document == model.Document);
                     if (usertwo != null)
                     {
-                        ModelState.AddModelError(string.Empty, "Documento de identidad ya esta registrado");
+                        _flashMessage.Danger("Documento de identidad ya esta registrado");
                         model.Countries = await _combosHelper.GetComboCountriesAsync();
                         model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                         model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
@@ -396,7 +401,8 @@ namespace AleedTiendaShopping.Controllers
             {
                 if(model.OldPassword == model.NewPassword)
                 {
-                    ModelState.AddModelError(string.Empty, "Debes ingresar una contraseña diferente.");
+                    _flashMessage.Danger("Debes ingresar una contraseña diferente.");
+
                     return View(model);
                 }
                 User? user = await _userHelper.GetUserAsync(User.Identity.Name);
@@ -409,12 +415,14 @@ namespace AleedTiendaShopping.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Valide que los datos ingresados son correctos.");
+                        _flashMessage.Danger("Valide que los datos ingresados son correctos.");
+
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Usuario no encontrado.");
+                    _flashMessage.Danger("Usuario no encontrado.");
+
                 }
             }
 
@@ -456,7 +464,8 @@ namespace AleedTiendaShopping.Controllers
                 User user = await _userHelper.GetUserAsync(model.Email);
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "El email no corresponde a ningún usuario registrado.");
+                    _flashMessage.Danger("El email no corresponde a ningún usuario registrado.");
+
                     return View(model);
                 }
 
@@ -472,7 +481,9 @@ namespace AleedTiendaShopping.Controllers
                     $"<h1>Shopping - Recuperación de Contraseña</h1>" +
                     $"Para recuperar la contraseña haga click en el siguiente enlace:" +
                     $"<p><a href = \"{link}\">Reset Password</a></p>");
-                ViewBag.Message = "Las instrucciones para recuperar la contraseña han sido enviadas a su correo.";
+                _flashMessage.Info("Las instrucciones para recuperar la contraseña han sido enviadas a su correo.");
+
+              
                 return View();
             }
 
@@ -493,17 +504,60 @@ namespace AleedTiendaShopping.Controllers
                 IdentityResult result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
                 if (result.Succeeded)
                 {
-                    ViewBag.Message = "Contraseña cambiada con éxito.";
+                    _flashMessage.Info("Contraseña cambiada con éxito.");
+
                     return View();
                 }
 
-                ViewBag.Message = "Error cambiando la contraseña.";
+               
+                _flashMessage.Info("Error cambiando la contraseña.");
+
                 return View(model);
             }
 
-            ViewBag.Message = "Usuario no encontrado.";
+         
+            _flashMessage.Info("Usuario no encontrado.");
+
             return View(model);
         }
 
+        public IActionResult ResendToken()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResendToken(ResendTokenViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _userHelper.GetUserAsync(model.Username);
+                string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                string tokenLink = Url.Action("ConfirmEmail", "Account", new
+                {
+                    userid = user.Id,
+                    token = myToken
+                }, protocol: HttpContext.Request.Scheme);
+
+                Response response = _mailHelper.SendMail(
+                    $"{model.FirstName} {model.LastName}",
+                    model.Username,
+                    "Shopping - Confirmación de Email",
+                    $"<h1>Shopping - Confirmación de Email</h1>" +
+                        $"Para habilitar el usuario por favor hacer click en el siguiente link:, " +
+                        $"<p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
+                if (response.IsSuccess)
+                {
+                    _flashMessage.Info("Email Re-Envíado. Para poder ingresar al sistema, siga las instrucciones que han sido enviadas a su correo.");
+                    return RedirectToAction(nameof(Login));
+                }
+
+                _flashMessage.Danger(response.Message);
+            }
+            return View(model);
+        }
+
+       
     }
 }

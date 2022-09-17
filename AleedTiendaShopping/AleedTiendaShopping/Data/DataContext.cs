@@ -11,6 +11,11 @@ namespace AleedTiendaShopping.Data
                 
         }
 
+        public DbSet<Sale> Sales { get; set; }
+
+        public DbSet<SaleDetail> SaleDetails { get; set; }
+
+        public DbSet<TemporalSale> TemporalSales { get; set; }
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<City> Cities { get; set; }
@@ -19,6 +24,11 @@ namespace AleedTiendaShopping.Data
 
         public DbSet<State> States { get; set; }
 
+        public DbSet<Products> Products { get; set; }
+
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+
+        public DbSet<ProductImage> ProductImages { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,6 +38,9 @@ namespace AleedTiendaShopping.Data
             modelBuilder.Entity<City>().HasIndex("Name", "StateId").IsUnique();
             modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<State>().HasIndex("Name", "CountryId").IsUnique();
+            modelBuilder.Entity<Products>().HasIndex(c => c.Name).IsUnique();
+            modelBuilder.Entity<ProductCategory>().HasIndex("ProductId", "CategoryId").IsUnique();
+
 
         }
     }

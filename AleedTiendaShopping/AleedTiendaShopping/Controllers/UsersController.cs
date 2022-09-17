@@ -7,6 +7,7 @@ using AleedTiendaShopping.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using Vereyon.Web;
 
 namespace AleedTiendaShopping.Controllers
 {
@@ -17,15 +18,18 @@ namespace AleedTiendaShopping.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IMailHelper _mailHelper;
+        private readonly IFlashMessage _flashMessage;
+
 
         public UsersController(IUserHelper userHelper, DataContext context, ICombosHelper combosHelper, IBlobHelper blobHelper,
-            IMailHelper mailHelper)
+            IMailHelper mailHelper, IFlashMessage  flashMessage)
         {
             _userHelper = userHelper;
             _context = context;
             _combosHelper = combosHelper;
             _blobHelper = blobHelper;
             _mailHelper = mailHelper;
+            _flashMessage = flashMessage;
         }
 
         public async Task<IActionResult> Index()
@@ -84,7 +88,7 @@ namespace AleedTiendaShopping.Controllers
 
                 if (!Regex.IsMatch(filename.ToLower(), @"^.*\.(jpg|gif|png|jpeg)$"))
                 {
-                    ModelState.AddModelError(string.Empty, "la imagen debe ser tipo .jpg .gift .png .jpeg");
+                    _flashMessage.Danger("la imagen debe ser tipo .jpg .gift .png .jpeg");
                     model.Countries = await _combosHelper.GetComboCountriesAsync();
                     model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
@@ -97,7 +101,7 @@ namespace AleedTiendaShopping.Controllers
            .FirstOrDefaultAsync(x => x.Document == model.Document);
                 if (usertwo != null)
                 {
-                    ModelState.AddModelError(string.Empty, "Documento de identidad ya esta registrado");
+                    _flashMessage.Danger( "Documento de identidad ya esta registrado");
                     model.Countries = await _combosHelper.GetComboCountriesAsync();
                     model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
@@ -130,7 +134,7 @@ namespace AleedTiendaShopping.Controllers
                 User user = await _userHelper.AddUserAsync(model);
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Este correo ya está siendo usado.");
+                    _flashMessage.Danger("Este correo ya está siendo usado.");
                     model.Countries = await _combosHelper.GetComboCountriesAsync();
                     model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
@@ -154,11 +158,11 @@ namespace AleedTiendaShopping.Controllers
                         $"<p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
                 if (response.IsSuccess)
                 {
-                    ViewBag.Message = "Las instrucciones para habilitar el usuario han sido enviadas al correo.";
+                    _flashMessage.Info( "Las instrucciones para habilitar el usuario han sido enviadas al correo.");
                     return View(model);
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
+                _flashMessage.Danger(string.Empty, response.Message);
 
             }
             model.Countries = await _combosHelper.GetComboCountriesAsync();
