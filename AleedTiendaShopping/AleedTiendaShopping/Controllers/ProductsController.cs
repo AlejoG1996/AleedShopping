@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System;
 using System.IO;
 using Vereyon.Web;
+using static AleedTiendaShopping.Helpers.ModalHelper;
 
 namespace AleedTiendaShopping.Controllers
 {
@@ -38,6 +39,7 @@ namespace AleedTiendaShopping.Controllers
                 .ToListAsync());
         }
 
+        [NoDirectAccess]
         public async Task<IActionResult> Create()
         {
             CreateProductViewModel model = new()
@@ -136,7 +138,16 @@ namespace AleedTiendaShopping.Controllers
                 {
                     _context.Add(product);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    _flashMessage.Confirmation("Registro creado.");
+                    return Json(new
+                    {
+                        isValid = true,
+                        html = ModalHelper.RenderRazorViewToString(this, "_ViewAllProducts", _context.Products
+                        .Include(p => p.ProductImages)
+                        .Include(p => p.ProductCategories)
+                        .ThenInclude(pc => pc.Category).ToList())
+                    });
+
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -156,9 +167,10 @@ namespace AleedTiendaShopping.Controllers
             }
 
             model.Categories = await _combosHelper.GetComboCategoriesAsync();
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
+        [NoDirectAccess]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -202,7 +214,15 @@ namespace AleedTiendaShopping.Controllers
                 product.Stock = model.Stock;
                 _context.Update(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _flashMessage.Confirmation("Registro actualizado.");
+                return Json(new
+                {
+                    isValid = true,
+                    html = ModalHelper.RenderRazorViewToString(this, "_ViewAllProducts", _context.Products
+                    .Include(p => p.ProductImages)
+                    .Include(p => p.ProductCategories)
+                    .ThenInclude(pc => pc.Category).ToList())
+                });
             }
             catch (DbUpdateException dbUpdateException)
             {
@@ -220,7 +240,7 @@ namespace AleedTiendaShopping.Controllers
                 _flashMessage.Danger(string.Empty, exception.Message);
             }
 
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "Edit", model) });
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -243,7 +263,7 @@ namespace AleedTiendaShopping.Controllers
             return View(product);
         }
 
-
+        [NoDirectAccess]
         public async Task<IActionResult> AddImage(int? id)
         {
             if (id == null)
@@ -303,15 +323,17 @@ namespace AleedTiendaShopping.Controllers
 
                 }
                
-                Products product = await _context.Products.FindAsync(model.ProductId);
+                Products product = await _context.Products
+                    .Include(c=>c.ProductImages)
+                    .FirstOrDefaultAsync(c=>c.Id==model.ProductId);
                 //almacenamiento foto
                 string ruta = "https://localhost:7116/images/noimage.png";
                 string path = "";
                 string pic = "";
                 if (model.ImageFile != null)
                 {
-
-                    pic = Path.GetFileName(product.Name.ToString() +model.ImagesNumber.ToString()+ ".png");
+                    
+                    pic = Path.GetFileName(product.Name.ToString() +product.ImagesNumber.ToString()+ ".png");
 
                     path = Path.Combine("wwwroot\\images\\products", pic);
                     ruta = "https://localhost:7116/images/products/" + pic;
@@ -337,7 +359,15 @@ namespace AleedTiendaShopping.Controllers
                 {
                     _context.Add(productImage);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Details), new { Id = product.Id });
+                    return Json(new
+                    {
+                        isValid = true,
+                        html = ModalHelper.RenderRazorViewToString(this, "Details", _context.Products
+                                       .Include(p => p.ProductImages)
+                                       .Include(p => p.ProductCategories)
+                                       .ThenInclude(pc => pc.Category)
+                                       .FirstOrDefaultAsync(p => p.Id == model.ProductId))
+                    });
                 }
                 catch (Exception exception)
                 {
@@ -345,7 +375,7 @@ namespace AleedTiendaShopping.Controllers
                 }
             }
 
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddImage", model) });
         }
 
 
@@ -385,7 +415,7 @@ namespace AleedTiendaShopping.Controllers
             return RedirectToAction(nameof(Details), new { Id = productImage.Product.Id });
         }
 
-
+        [NoDirectAccess]
         public async Task<IActionResult> AddCategory(int? id)
         {
             if (id == null)
@@ -436,7 +466,15 @@ namespace AleedTiendaShopping.Controllers
                 {
                     _context.Add(productCategory);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Details), new { Id = product.Id });
+                    return Json(new
+                    {
+                        isValid = true,
+                        html = ModalHelper.RenderRazorViewToString(this, "Details", _context.Products
+                                       .Include(p => p.ProductImages)
+                                       .Include(p => p.ProductCategories)
+                                       .ThenInclude(pc => pc.Category)
+                                       .FirstOrDefaultAsync(p => p.Id == model.ProductId))
+                    });
                 }
                 catch (Exception exception)
                 {
@@ -451,7 +489,8 @@ namespace AleedTiendaShopping.Controllers
                 Name = pc.Category.Name,
             }).ToList();
             model.Categories = await _combosHelper.GetComboCategoriesAsync(categories);
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddCategory", model) });
+
         }
 
         public async Task<IActionResult> DeleteCategory(int? id)
@@ -476,33 +515,18 @@ namespace AleedTiendaShopping.Controllers
         }
 
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            Products product = await _context.Products
-                .Include(pc => pc.ProductCategories)
-                .Include(pi => pi.ProductImages)
-                .FirstOrDefaultAsync(p => p.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [NoDirectAccess]
         public async Task<IActionResult> Delete(Products model)
         {
             Products product = await _context.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductCategories)
                 .FirstOrDefaultAsync(pi => pi.Id == model.Id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
             //borrar azure
             //foreach (ProductImage productImage in product.ProductImages)
@@ -510,10 +534,9 @@ namespace AleedTiendaShopping.Controllers
             //    await _blobHelper.DeleteBlobAsync(productImage.ImageId, "products");
             //}
 
-           
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+
+            
 
             //borar carpeta
             foreach (ProductImage productImage in product.ProductImages)
@@ -530,6 +553,8 @@ namespace AleedTiendaShopping.Controllers
                 }
 
             }
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
             _flashMessage.Info("Registro Borrado");
             return RedirectToAction(nameof(Index));
         }

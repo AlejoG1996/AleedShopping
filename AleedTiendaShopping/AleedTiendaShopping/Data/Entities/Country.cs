@@ -16,5 +16,8 @@ namespace AleedTiendaShopping.Data.Entities
         [Display(Name = "Estados / Departamentos")]
         public int StatesNumber => States == null ? 0 : States.Count;
 
+        [Display(Name = "Ciudades")]
+        public int CitiesNumber => States == null ? 0 : States.Sum(s => s.CitiesNumber);
+
     }
 }
