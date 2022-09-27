@@ -82,19 +82,19 @@ namespace AleedTiendaShopping.Data
         {
             if (!_context.Categories.Any())
             {
-                _context.Categories.Add(new Category { Name = "Empaques" });
-                _context.Categories.Add(new Category { Name = "Bolsas" });
-                _context.Categories.Add(new Category { Name = "Regalos" });
-                _context.Categories.Add(new Category { Name = "Peluches" });
-                _context.Categories.Add(new Category { Name = "Belleza" });
                 _context.Categories.Add(new Category { Name = "Accesorios" });
-                _context.Categories.Add(new Category { Name = "Flores" });
-                _context.Categories.Add(new Category { Name = "Papeles" });
-                _context.Categories.Add(new Category { Name = "Globos" });
-
-                _context.Categories.Add(new Category { Name = "Dulces" });
                 _context.Categories.Add(new Category { Name = "Bebidas" });
+                _context.Categories.Add(new Category { Name = "Belleza" });
+                _context.Categories.Add(new Category { Name = "Bolsas" });
                 _context.Categories.Add(new Category { Name = "Decoración" });
+                _context.Categories.Add(new Category { Name = "Dulces" });
+                _context.Categories.Add(new Category { Name = "Empaques" });
+                _context.Categories.Add(new Category { Name = "Flores" });
+                _context.Categories.Add(new Category { Name = "Globos" });
+                _context.Categories.Add(new Category { Name = "Regalos" });
+                _context.Categories.Add(new Category { Name = "Papeles" });
+                _context.Categories.Add(new Category { Name = "Peluches" });
+               
                
             }
 
