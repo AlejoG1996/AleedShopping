@@ -5,25 +5,33 @@
 }
 
 
+ <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+ <link  rel="stylesheet" href="~/css/AdminStyle.css"/>
+ 
+    <link  rel="stylesheet" href="~/css/normalize.css"/>
+    
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-<div class="container-fluid">
-    <h3 class="text-muted">Dashboard</h3>
-</div>
 
 
-<div class="container-fluid">
+
+
+<div class="container__card">
     <div class="row">
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <div class="card-body d-flex align-items-center justify-content-between"><h5>Nuevos Pedidos <span class="badge bg-light text-dark">@ViewBag.NewOrdersCount</span></h5> <i class="fa-solid fa-3x fa-cart-shopping"></i> </div>
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card  text-white mb-4 card__info card_u">
+                <div class="card-body d-flex align-items-center justify-content-between"><h5>Nuevos <br /> Pedidos <span class="badge bg-light text-dark">@ViewBag.NewOrdersCount</span></h5> <i class="fa-solid fa-3x fa-cart-shopping"></i> </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href=@Url.Action("Index","Orders")>Ver Pedidos</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-warning text-white mb-4">
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card  text-white mb-4 card__info card_d">
                 <div class="card-body d-flex align-items-center justify-content-between"><h5>Productos <span class="badge bg-light text-dark">@ViewBag.ProductsCount</span> </h5> <i class="fa-solid fa-3x fa-tags"></i></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href=@Url.Action("Index","Products")>Ver Productos</a>
@@ -31,8 +39,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-success text-white mb-4">
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card  text-white mb-4 card__info card_t">
                 <div class="card-body d-flex align-items-center justify-content-between"><h5>Usuarios <span class="badge bg-light text-dark">@ViewBag.UsersCount</span> </h5>  <i class="fa-solid fa-3x fa-users"></i> </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href=@Url.Action("Index","Users")>Ver Usuarios</a>
@@ -40,9 +48,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-danger text-white mb-4">
-                <div class="card-body d-flex align-items-center justify-content-between"><h5>Pedidos Confirmados <span class="badge bg-light text-dark">@ViewBag.ConfirmedOrdersCount</span></h5> <i class="fa-solid fa-3x fa-clock"></i> </div>
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card  text-white mb-4 card__info card_c">
+                <div class="card-body d-flex align-items-center justify-content-between"><h5>Pedidos  <br /> Confirmados <span class="badge bg-light text-dark">@ViewBag.ConfirmedOrdersCount</span></h5> <i class="fa-solid fa-3x fa-clock"></i> </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href=@Url.Action("Index","Orders")>Ver Pedidos</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -52,13 +60,13 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container_table">
     <div class="card">
         <h5 class="card-header">
-            <i class="fa-solid fa-tags text-danger"></i> Productos Agregados al Carro de Compras
+            <i class="fa-solid fa-tags icon_color"></i> Productos Agregados al Carro de Compras
         </h5>
     <div class="card-body">
-        <div class="row">
+        <div class="card__info-t">
             <div class="col-md-12">
 
                 <table class="table table-hover table-responsive table-striped smfnt" id="TempTable" style="width:100%">

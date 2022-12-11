@@ -1,7 +1,7 @@
 ﻿@model AleedTiendaShopping.Models.CreateProductViewModel
 
-<div class="row">
-    <div class="col-md-6">
+<div class="row content__inp-prod">
+    <div class="col-md-6 ">
         <div class="form-group">
             <span class="required">*</span>
             <label asp-for="Name" class="control-label"></label>
@@ -19,11 +19,11 @@
         <div class="form-group">
             <span class="required">*</span>
             <label asp-for="CategoryId" class="control-label"></label>
-            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
+            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control select_crete"></select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 ">
         <div class="form-group">
             <span class="required">*</span>
             <label asp-for="Price" class="control-label"></label>

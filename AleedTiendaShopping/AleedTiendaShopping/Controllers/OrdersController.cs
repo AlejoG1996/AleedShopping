@@ -9,7 +9,7 @@ using Vereyon.Web;
 
 namespace AleedTiendaShopping.Controllers
 {
-    [Authorize(Roles = "Admin")]
+   
     public class OrdersController : Controller
     {
         private readonly DataContext _context;
@@ -33,6 +33,7 @@ namespace AleedTiendaShopping.Controllers
                 .ThenInclude(sd => sd.Product)
                 .ToListAsync());
         }
+       
         [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Details(int? id)
@@ -55,6 +56,7 @@ namespace AleedTiendaShopping.Controllers
 
             return View(sale);
         }
+       
         [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Dispatch(int? id)
@@ -84,6 +86,7 @@ namespace AleedTiendaShopping.Controllers
 
             return RedirectToAction(nameof(Details), new { Id = sale.Id });
         }
+       
         [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Send(int? id)

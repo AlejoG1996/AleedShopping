@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Vereyon.Web;
+using static AleedTiendaShopping.Helpers.ModalHelper;
 
 namespace AleedTiendaShopping.Controllers
 {
@@ -27,11 +28,79 @@ namespace AleedTiendaShopping.Controllers
             _context = context;
             _userHelper = userHelper;
             _ordersHelper = ordersHelper;
-            _flashMessage=flashMessage;
+            _flashMessage = flashMessage;
         }
 
 
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "NameDesc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "PriceDesc" : "Price";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            IQueryable<Products> query = _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(p => (p.Name.ToLower().Contains(searchString.ToLower()) ||
+                                            p.ProductCategories.Any(pc => pc.Category.Name.ToLower().Contains(searchString.ToLower()))) &&
+                                            p.Stock > 0);
+            }
+            else
+            {
+                query = query.Where(p => p.Stock > 0);
+            }
+
+            switch (sortOrder)
+            {
+                case "NameDesc":
+                    query = query.OrderByDescending(p => p.Name);
+                    break;
+                case "Price":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                case "PriceDesc":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    query = query.OrderBy(p => p.Name);
+                    break;
+            }
+
+            int pageSize = 8;
+
+            HomeViewModel model = new()
+            {
+                Products = await PaginatedList<Products>.CreateAsync(query, pageNumber ?? 1, pageSize),
+                Categories = await _context.Categories.ToListAsync(),
+            };
+
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user != null)
+            {
+                model.Quantity = await _context.TemporalSales
+                    .Where(ts => ts.User.Id == user.Id)
+                    .SumAsync(ts => ts.Quantity);
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Inicio(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "NameDesc" : "";
@@ -153,7 +222,122 @@ namespace AleedTiendaShopping.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [NoDirectAccess]
+        public async Task<IActionResult> DetailsBuy(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Products product = await _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            string categories = string.Empty;
+            string categ = string.Empty;
+            foreach (ProductCategory? category in product.ProductCategories)
+            {
+                categories += $"{category.Category.Name}, ";
+                categ = category.Category.Name;
+            }
+            categories = categories.Substring(0, categories.Length - 2);
+
+
+
+            ViewData["CurrentFilter"] = categ;
+
+            IQueryable<Products> query = _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category);
+
+            if (!string.IsNullOrEmpty(categ))
+            {
+                query = query.Where(p => (p.Name.ToLower().Contains(categ.ToLower()) ||
+                                            p.ProductCategories.Any(pc => pc.Category.Name.ToLower().Contains(categ.ToLower()))) &&
+                                            p.Stock > 0);
+            }
+            else
+            {
+                query = query.Where(p => p.Stock > 0);
+            }
+
+
+
+            int pageSize = 9;
+
+
+            int? pageNumber = 1;
+            AddProductToCartViewModel model = new()
+            {
+                Categories = categories,
+                Description = product.Description,
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                ProductImages = product.ProductImages,
+                Quantity = 1,
+                Stock = product.Stock,
+                prod = await PaginatedList<Products>.CreateAsync(query, pageNumber ?? 1, pageSize),
+
+
+            };
+
+
+
+            return View(model);
+        }
+
+        [NoDirectAccess]
         public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Products product = await _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            string categories = string.Empty;
+            foreach (ProductCategory? category in product.ProductCategories)
+            {
+                categories += $"{category.Category.Name}, ";
+            }
+            categories = categories.Substring(0, categories.Length - 2);
+
+            AddProductToCartViewModel model = new()
+            {
+                Categories = categories,
+                Description = product.Description,
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                ProductImages = product.ProductImages,
+                Quantity = 1,
+                Stock = product.Stock,
+            };
+
+            return View(model);
+        }
+
+
+        [NoDirectAccess]
+        public async Task<IActionResult> Buy(int? id)
         {
             if (id == null)
             {
@@ -215,6 +399,7 @@ namespace AleedTiendaShopping.Controllers
 
             TemporalSale temporalSale = new()
             {
+
                 Product = product,
                 Quantity = model.Quantity,
                 Remarks = model.Remarks,
@@ -223,7 +408,11 @@ namespace AleedTiendaShopping.Controllers
 
             _context.TemporalSales.Add(temporalSale);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _flashMessage.Info("Producto Agregado");
+
+
+
+            return RedirectToAction(nameof(DetailsBuy), new { Id = model.Id });
         }
 
         [Authorize]
@@ -241,7 +430,8 @@ namespace AleedTiendaShopping.Controllers
                 .Where(ts => ts.User.Id == user.Id)
                 .ToListAsync();
 
-            ShowCartViewModel model = new()
+           
+                ShowCartViewModel model = new()
             {
                 User = user,
                 TemporalSales = temporalSales,
@@ -388,6 +578,12 @@ namespace AleedTiendaShopping.Controllers
                 .ThenInclude(p => p.ProductImages)
                 .Where(ts => ts.User.Id == user.Id)
                 .ToListAsync();
+
+            if (model.TemporalSales.Count==0)
+            {
+                _flashMessage.Danger("Debe agregar almenos un producto para enviar el pedido.");
+                return RedirectToAction(nameof(ShowCart));
+            }
 
             Response response = await _ordersHelper.ProcessOrderAsync(model);
             if (response.IsSuccess)

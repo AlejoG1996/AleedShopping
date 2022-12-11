@@ -1,16 +1,36 @@
 ﻿<div class="modal fade in" id="deleteDialog" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-blue-gradient">
+            <div class="modal-header header__color">
                 <h5 class="modal-title" id="exampleModalLabel">Borrar Registro</h5>
             </div>
             <div class="modal-body">
                 <p>¿Estas seguro de querer borrar este registro?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="fa fa-ban"> </i> No</button>
-                <button type="button" class="btn btn-danger" id="btnYesDelete"><i class="fa fa-check-circle"> </i> Sí</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" id="btnYesDelete">Sí</button>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .header__color {
+    background-image: linear-gradient(to left, #43CBFF, #9708CC) !important;
+    color:#fff !important;
+    }
+    .modal{
+        margin:auto!important;
+        
+    }
+
+    .modal-content{
+   margin:auto !important;
+    width: 70% !important;
+    max-width: 70% !important;
+    
+       }
+
+}
+</style>

@@ -1,63 +1,293 @@
 ﻿@model AleedTiendaShopping.Models.AddUserViewModel
 @{
     ViewData["Title"] = "Register";
+   
 }
 
-<h2>Registrar</h2>
-<flash dismissable="true" />
-<h4>Usuario</h4>
-<div class="text-success">
-    <h3>
-        @ViewBag.Message
-    </h3>
-</div>
+<style>
+    
+    .content__error{
+        width:100% !important;
+        max-width:480px !important;
+    }
 
-<hr />
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="Register" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    .form-register__header{
+          width:100% !important;
+        max-width:480px !important;
+    }
+    body{
+         width:100% !important;
+         margin:0!important;
+          padding:0!important;
+                    max-width:100% !important;
+
+    }
+
+    .necesary{
+        color:#7f3980;
+    }
+   
+    #footer{
+        display:none!important;
+    }
+    .panels-container{
+         width:100% !important;
+         margin:0!important;
+          padding:0!important;
+          max-width:100% !important;
+    }
+      .container{
+        width:100% !important;
+         margin:0!important;
+          padding:0!important;
+                    max-width:100% !important;
+
+    }
+
+     .container_login{
+          width:100% !important;
+         
+     }
+     .signin-signup{
+         padding-top:65px!important;
+     }
+    header{
+        display:none !important;
+    }
+
+    nav{
+        display:none !important;
+    }
+
+
+     footer{
+        display:none !important;
+    }
+                    .container_login:before {
+
+
+                background-image: linear-gradient(-45deg, #cd5cce 0%, #7f3980 100%) !important;
+
+                }
+
+                .btn.transparent:hover {
+                    background: #fff !important;
+                    color:#7f3980 !important;
+                }
+
+                .input-field {
+            max-width: 480px !important;}
+
+            .input-field {
+
+
+        border-radius: 5px !important;
+
+
+    }
+
+</style>
+
+<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+<link rel="stylesheet" href="~/css/LoginStyle.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+<div class="container_login">
+    <div class="forms-container">
+        <div class="signin-signup">
+            <form asp-action="Register" enctype="multipart/form-data" class="sign-in-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="UserType" />
             <input type="hidden" asp-for="Countries" />
             <input type="hidden" asp-for="States" />
             <input type="hidden" asp-for="Cities" />
             <input type="hidden" asp-for="ImageFullPath" />
+                <h2 class="title">Registro</h2>
+                <!--section bar-->
+                <div class="form-register__header">
+                    <ul class="progressbar">
 
-            <div class="form-group">
-                  <span class="required">*</span>
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
+                        <li class="progressbar__option active">Personal</li>
+                        <li class="progressbar__option">Ubicación</li>
+                        <li class="progressbar__option">Usuario</li>
+                    </ul>
+                </div>
+                <div class="content__error">
+                    <flash dismissable="true" />
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                          <span class="required">*</span>
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <!--arte formulario-->
+                <div class="form-register__body">
+                    <div class="step active" id="step-1">
+
+
+                        <div class="step__body">
+
+                      
+                            
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-id-card"></i>
+                                <input asp-for="Document" class="" placeholder="Documento" />
+                            </div>
+                            <span asp-validation-for="Document" class="text-danger text__error"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-person"></i>
+                                <input asp-for="FirstName" class="" placeholder="Nombres" />
+                            </div>
+                            <span asp-validation-for="FirstName" class="text-danger text__error"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-person"></i>
+                                <input asp-for="LastName" class="" placeholder="Apellidos" />
+                            </div>
+                            <span asp-validation-for="LastName" class="text-danger text__error"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-mobile"></i>
+                                <input asp-for="PhoneNumber" class="" placeholder="Telefono" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger text__error"></span>
+                            <p class="necesary">*Todos los campos son necesarios</p>
+                        </div>
+                        
+                        <div class="step__footer">
+                            <button type="button" class="step__button step__button--next" data-to_step="2" data-step="1" style=" float: right !important;">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step-2">
+
+
+                        <div class="step__body">
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <input asp-for="Address" class="" placeholder="Dirección" />
+
+                            </div>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-earth-americas"></i>
+
+                                <select asp-for="CountryId" asp-items="Model.Countries" class=""></select>
+                            </div>
+                            <span asp-validation-for="CountryId" class="text-danger"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-mountain-sun"></i>
+
+                                <select asp-for="StateId" asp-items="Model.States" class=""></select>
+                            </div>
+                            <span asp-validation-for="StateId" class="text-danger"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-building"></i>
+
+                                <select asp-for="CityId" asp-items="Model.Cities" class=""></select>
+                            </div>
+                            <span asp-validation-for="CityId" class="text-danger"></span>
+
+                            <p class="necesary">*Todos los campos son necesarios</p>
+
+                        </div>
+                                                
+
+                        <div class="step__footer">
+                            <button type="button" class="step__button step__button--back" data-to_step="1" data-step="2">Regresar</button>
+                            <button type="button" class="step__button step__button--next" data-to_step="3" data-step="2">Siguiente</button>
+                        </div>
+                    </div>
+
+
+                    <div class="step" id="step-3">
+
+                        <div class="step__body">
+                             
+                <div class="viewphoto">
+                       <img id="imagenPrevisualizacion" src="~/images/noimage.png" />
+                      <button type="button" id="custom-button"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+                       <input asp-for="ImageFile" class="form-control" type="file" id="real-file" hidden="hidden" accept="image/*"  display="none"/>
+                </div>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-at"></i>
+                                <input asp-for="Username" class="" placeholder="Email" />
+
+                            </div>
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                            <div class="input-field">
+
+                               <i class="fa-solid fa-key"></i>
+                                <input asp-for="Password" class="" placeholder="Contraseña" />
+
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+
+                            <div class="input-field">
+
+                               <i class="fa-solid fa-key"></i>
+                                <input asp-for="PasswordConfirm" class="" placeholder="Confirmar Contraseña" />
+
+                            </div>
+                            <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+                                                    <p class="necesary">*Todos los campos son necesarios</p>
+
+                        <div class="step__footer">
+                            <button type="button" class="step__button step__button--back" data-to_step="2" data-step="3">Regresar</button>
+                            <button type="submit" class="step__button">Registrarse</button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                          <span class="required">*</span>
-                        <label asp-for="PasswordConfirm" class="control-label"></label>
-                        <input asp-for="PasswordConfirm" class="form-control" />
-                        <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
-                    </div>
+
+
+
+
+
                 </div>
-            </div>    
-
-            <partial name="_User" />
-
-            <div class="form-group mt-2">
-                <input type="submit" value="Registrar" class="btn btn-outline-primary" />
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
+
+    <div class="panels-container">
+        <div class="panel left-panel">
+            <div class="content">
+                <h3>¿Ya tienes cuenta?</h3>
+                <p>
+                    Ingresa para disfrutar de nuestros maravillosos productos
+                </p>
+                <a asp-action="Login" class="btn transparent" id="sign-up-btn">
+                    Iniciar Sesion
+                </a>
+            </div>
+            <img src="~/images/registro.svg" class="image" alt="" />
+        </div>
+
+
+    </div>
+</div>      
+   
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jasny/jasny-bootstrap.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+
+<!-- Javascript -->
+
+<script src="~/js/scripts.js"></script>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -111,5 +341,55 @@
                 return false;
             })
         });
+
+
+        const realFileBtn = document.getElementById("real-file");
+                        const customBtn = document.getElementById("custom-button");
+                        const customTxt = document.getElementById("custom-text");
+                        var img = document.getElementById("imagenPrevisualizacion");
+
+                        customBtn.addEventListener("click", function () {
+                            realFileBtn.click();
+                        });
+
+                        realFileBtn.addEventListener("change", function () {
+                            if (realFileBtn.value) {
+                                customTxt.innerHTML = realFileBtn.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+                            } else {
+                                customTxt.innerHTML = "No se ha cargado ninguna imagen";
+                            }
+                        })
+
+                        const $seleccionArchivos = document.querySelector("#real-file"),
+                            $imagenPrevisualizacion = document.querySelector("#imagenPrevisualizacion");
+
+                        // Escuchar cuando cambie
+                        $seleccionArchivos.addEventListener("change", () => {
+                            // Los archivos seleccionados, pueden ser muchos o uno
+                            const archivos = $seleccionArchivos.files;
+                            // Si no hay archivos salimos de la función y quitamos la imagen
+                            if (!archivos || !archivos.length) {
+                                $imagenPrevisualizacion.src = "";
+                                return;
+                            }
+
+
+                            var filePath = realFileBtn.value;
+                            var allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
+                            if (!allowedExtensions.exec(filePath)) {
+
+
+
+                            } else {
+                                // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+                                const primerArchivo = archivos[0];
+                                // Lo convertimos a un objeto de tipo objectURL
+                                const objectURL = URL.createObjectURL(primerArchivo);
+                                // Y a la fuente de la imagen le ponemos el objectURL
+                                $imagenPrevisualizacion.src = objectURL;
+                            }
+                        });
     </script>
 }
+
+                                                

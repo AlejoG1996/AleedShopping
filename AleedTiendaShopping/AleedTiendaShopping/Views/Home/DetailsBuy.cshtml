@@ -1,0 +1,214 @@
+﻿@model AleedTiendaShopping.Models.AddProductToCartViewModel
+
+@{
+    ViewData["Title"] = "Details";
+  
+}
+
+<style>
+    .container{
+        padding-top:0px !important;
+        margin-top:0px !important;
+    }
+
+    .container__products{
+          padding-top:10px !important;
+    }
+
+    .content__info-buy{
+    padding-top: 150px !important;
+    padding-bottom: 70px !important;
+   
+}
+
+.row {
+     
+    width: 90% !important;
+    margin: auto !important;
+}
+
+
+
+.container{
+      width: 90% !important;
+    margin: auto !important;
+
+}
+
+.btn_carro_compra{
+    margin-left:60px!important;
+}
+
+.products_secundarios"{
+     width: 90% !important;
+    margin: auto !important;
+}
+
+.content__info-buy{
+     width: 90% !important;
+    margin: auto !important;
+}
+</style>
+
+ <link  rel="stylesheet" href="~/css/normalize.css"/>
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/HomeStyle.css"/>
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<div class="row content__info-buy">
+
+    <div class="col-md-6">
+        <div id="ImagesCarousel" class="carousel slide conten__imagescard" data-ride="carousel">
+
+            <div class="carousel-inner img_productcard zoom">
+                @{
+                    var first = true;
+                }
+                @foreach (var item in @Model?.ProductImages)
+                {
+                    <div class="carousel-item  @(first?Html.Raw("active"):Html.Raw(""))">
+                        <img class="d-block w-100   img__carrousel " src="@item.ImageFullPath" alt="@item.Id">
+                    </div>
+                    first = false;
+                }
+            </div>
+            <a id="ImagesCarouselPrev" class="carousel-control-prev  " href="#ImagesCarousel" role="button"
+               data-slide="prev">
+                <i class="fa-solid fa-caret-left prev__Color"></i>
+            </a>
+            <a id="ImagesCarouselNext" class="carousel-control-next " href="#ImagesCarousel" role="button"
+               data-slide="next">
+               <i class="fa-solid fa-caret-right prev__Color"></i>
+            </a>
+            <div class="contentenedor__carro">
+     
+</div>
+        </div>
+    </div>
+    <div class="col-md-6 ">
+         <flash dismissable="true" />
+         <h1>@Model?.Name</h1>
+         <div class="info__droduct col-md-12">
+             <div class="information__part">
+              <label class="control-label information__title"> @Html.DisplayNameFor(model => model.Description):</label>
+               <p>@Html.DisplayFor(model => model.Description)</p>
+            </div>
+          </div>
+           <div class="info__droductb col-md-12">
+            
+             
+            <div class="information__partb col-md-6  iformpt">
+              <label class="control-label information__title">  @Html.DisplayNameFor(model => model.Price):</label>
+               <p>@Html.DisplayFor(model => model.Price)</p>
+            </div>
+            
+           
+           
+           </div>
+
+           
+             <div class="  col-md-12">
+                 
+                <input type="button" value="Regresar" onClick="history.go(-1);" class=" btn_buy " >
+
+               
+             
+
+            </div>
+
+    </div>
+</div>
+
+
+<div class="products_secundarios">
+    <h2 class="subtitle text-center section__secondproduct">Productos que te pueden interesar</h2>
+ </div>
+   <div class="contentenedor__carro">
+  
+              
+          <a asp-action="ShowCart" class="btn_carro_compra"><i class="fa-solid fa-cart-shopping svg_carro"></i>Ver Carro de Compras</a>
+    
+</div>
+<div class="products_secundarios">
+    
+  
+     <div class="container__products">
+         
+   
+        @foreach (var item in Model.prod)
+        {
+            
+                <div class="card ">
+                  <div class="content__imageproduct">
+                         <img src="@item.ImageFullPath"  class="image_product zoom" alt=@item.Name />                                
+                   </div>
+                   <div class="product__info">
+                               <span class="shoe_name">@item.Name</span>
+                               <p>@item.Description</p>
+                                                            
+                     </div>
+
+                    <div class="product__price">
+                                        <span class="price_num">@Html.DisplayFor(modelItem => item.Price)</span>
+                    </div>
+                    <div class="card-footer text-center">
+                          <a onclick="showInPopup('@Url.Action("Details", "Home", new { id = item.Id }, Context.Request.Scheme)' , 'Detalle Producto')" class="btn btn-sm  btn_details">Detalle</a>
+                                                   <a onclick="showInPopup('@Url.Action("Buy", "Home", new { id = item.Id }, Context.Request.Scheme)' , 'Comprar Producto')" class="btn btn-sm btn_add">Comprar</a>
+
+                          <partial name="_ProducDialog" />
+                    </div>
+                </div>
+            
+        }
+    
+    
+
+</div>
+
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script src="~/js/categoriesslider.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="~/js/MenuResponsive.js"></script> 
+<script src="~/js/swiper-bundle.min.js"></script>
+<script src="~/js/script.js"></script>
+<script src="~/js/showmodal.js"></script>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jasny/jasny-bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/lib/font-awesome/js/all.min.js"></script>
+<script>
+    let refresh = document.getElementById('refresh');
+refresh.addEventListener('click', _ => {
+            location.reload();
+})
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ImagesCarousel").carousel();
+        $("#ImagesCarouselPrev").click(function(){
+            $("#ImagesCarousel").carousel("prev");
+        });
+        $("#ImagesCarouselNext").click(function(){
+            $("#ImagesCarousel").carousel("next");
+        });
+    });
+
+
+</script>
+}

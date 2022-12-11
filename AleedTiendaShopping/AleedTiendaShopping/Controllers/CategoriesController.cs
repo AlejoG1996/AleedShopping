@@ -91,27 +91,31 @@ namespace AleedTiendaShopping.Controllers
                         await _context.SaveChangesAsync();
                         _flashMessage.Info("Registro actualizado.");
                     }
+                    return Json(new
+                    {
+                        isValid = true,
+                        html = ModalHelper.RenderRazorViewToString(
+                            this,
+                            "_ViewAll",
+                            _context.Categories
+                                .ToList())
+                    });
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        _flashMessage.Danger("Ya existe una categoría con el mismo nombre.");
+                        _flashMessage.Danger("Ya existe una categoria con el mismo nombre.");
                     }
                     else
                     {
                         _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
-                    return View(category);
                 }
                 catch (Exception exception)
                 {
                     _flashMessage.Danger(exception.Message);
-                    return View(category);
                 }
-
-                return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAll", _context.Categories.Include(c => c.ProductCategories).ToList()) });
-
             }
 
             return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", category) });

@@ -1,0 +1,71 @@
+﻿@model AleedTiendaShopping.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{
+    Layout = null;
+}
+   <link  rel="stylesheet" href="~/css/normalize.css"/>
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/HomeStyle.css"/>
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+   <div class="container__products">
+
+    @if (Model.Products.Count() > 0)
+    {
+        @foreach (var item in Model.Products)
+        {
+            
+                <div class="card ">
+                  <div class="content__imageproduct">
+                         <img src="@item.ImageFullPath"  class="image_product zoom" alt=@item.Name />                                
+                   </div>
+                   <div class="product__info">
+                               <span class="shoe_name">@item.Name</span>
+                               <p>@item.Description</p>
+                                                            
+                     </div>
+
+                    <div class="product__price">
+                                        <span class="price_num">@Html.DisplayFor(modelItem => item.Price)</span>
+                    </div>
+                    <div class="card-footer text-center">
+                          <a onclick="showInPopup('@Url.Action("Details", "Home", new { id = item.Id }, Context.Request.Scheme)' , 'Detalle Producto')" class="btn btn-sm  btn_details">Detalle</a>
+                   <partial name="_ProducDialog" />
+                        <a asp-action="Add" asp-route-id="@item.Id" class="btn btn-sm btn_add">Comprar</a>
+                    </div>
+                </div>
+            
+        }
+    }
+    
+
+</div>
+@{
+    var prevDisabled = !Model.Products.HasPreviousPage ? "disabled ocultar" : "";
+    var nextDisabled = !Model.Products.HasNextPage ? "disabled ocultar" : "";
+}
+
+                          <div class="container_pagination">
+    
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.Products.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn-next @nextDisabled">
+        Siguiente
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.Products.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class=" btn-back @prevDisabled">
+        Anterior
+    </a>
+</div>

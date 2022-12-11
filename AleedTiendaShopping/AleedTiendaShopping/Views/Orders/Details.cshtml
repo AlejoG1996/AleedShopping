@@ -4,28 +4,46 @@
     ViewData["Title"] = "Details";
 }
 
-<flash dismissable="true" />
+ <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+ <link  rel="stylesheet" href="~/css/AdminStyle.css"/>
+ 
+    <link  rel="stylesheet" href="~/css/normalize.css"/>
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-<h1>Detalles</h1>
-
-<div>
-    <partial name="_OrderDetails" />    
+<div class="container__infoprocess">
+    <flash dismissable="true" />
 </div>
 
-<div>
-    <a asp-action="Dispatch" asp-route-id="@Model?.Id" class="btn btn-outline-primary">Despachar</a>
+
+<div class="container__card-order">
+    <div class="info-order_btn col-sm-10 ">
+        <div class="btns-o">
+            <a asp-action="Dispatch" asp-route-id="@Model?.Id" class="btn btn-outline-primary">Despachar</a>
     <a asp-action="Send" asp-route-id="@Model?.Id" class="btn btn-outline-secondary">Envíar</a>
-    <a asp-action="Confirm" asp-route-id="@Model?.Id" class="btn btn-outline-warning">Confirmar</a>
-    <a asp-action="Cancel" asp-route-id="@Model?.Id" class="btn btn-outline-danger">Cancelar</a>
+    <a asp-action="Confirm" asp-route-id="@Model?.Id" class="btn btn-outline-secondary">Confirmar</a>
+    <a asp-action="Cancel" asp-route-id="@Model?.Id" class="btn btn-outline-secondary">Cancelar</a>
     <a asp-action="Index" class="btn btn-outline-success"><i class="fa-solid fa-arrow-rotate-left"></i> Regresar</a>
+        </div>
+   </div>
+
+    <div class="info-order">
+     <partial name="_OrderDetails" />  
+   </div>
+  
+   
 </div>
 
-<hr />
 
-<div class="container-fluid">
+
+
+
+<div class="container__tableorder">
     <div class="card mt-2">
-        <div class="card-header text-danger">
-            <i class="fa fa-usd"></i>  <strong>Pedidos</strong>
+        <div class="card-header  text-purple">
+            <i class="fa fa-usd"></i>  <strong>Productos</strong>
         </div>
         <div class="card-body">
             <div id="view-all">

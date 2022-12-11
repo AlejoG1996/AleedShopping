@@ -82,42 +82,43 @@ namespace AleedTiendaShopping.Controllers
                     _flashMessage.Danger(string.Empty, "la imagen debe ser tipo .jpg .gift .png .jpeg");
                     model.Categories = await _combosHelper.GetComboCategoriesAsync();
 
-                    return View(model);
+                   
 
                 }
-
-                //almacenamiento foto
-                string ruta = "https://localhost:7116/images/noimage.png";
-                string path = "";
-                string pic = "";
-                string nameimg = "noimage.png";
-                if (model.ImageFile != null)
+                else
                 {
-
-                    pic = Path.GetFileName(model.Name.ToString() +".png");
-
-                    path = Path.Combine("wwwroot\\images\\products", pic);
-                    ruta = "https://localhost:7116/images/products/" + pic;
-                    nameimg = pic;
-                    using (FileStream stream = new FileStream(path, FileMode.Create))
+                    //almacenamiento foto
+                    string ruta = "https://localhost:7116/images/noimage.png";
+                    string path = "";
+                    string pic = "";
+                    string nameimg = "noimage.png";
+                    if (model.ImageFile != null)
                     {
-                        model.ImageFile.CopyTo(stream);
-                       
+
+                        pic = Path.GetFileName(model.Name.ToString() + ".png");
+
+                        path = Path.Combine("wwwroot\\images\\products", pic);
+                        ruta = "https://localhost:7116/images/products/" + pic;
+                        nameimg = pic;
+                        using (FileStream stream = new FileStream(path, FileMode.Create))
+                        {
+                            model.ImageFile.CopyTo(stream);
+
+
+                        }
+
 
                     }
 
+                    Products product = new()
+                    {
+                        Description = model.Description,
+                        Name = model.Name,
+                        Price = model.Price,
+                        Stock = model.Stock,
+                    };
 
-                }
-
-                Products product = new()
-                {
-                    Description = model.Description,
-                    Name = model.Name,
-                    Price = model.Price,
-                    Stock = model.Stock,
-                };
-
-                product.ProductCategories = new List<ProductCategory>()
+                    product.ProductCategories = new List<ProductCategory>()
                     {
                         new ProductCategory
                            {
@@ -125,45 +126,47 @@ namespace AleedTiendaShopping.Controllers
                            }
                     };
 
-                if (ruta != "https://localhost:7116/images/noimage.png")
+                    if (ruta != "https://localhost:7116/images/noimage.png")
 
-                {
-                    product.ProductImages = new List<ProductImage>()
+                    {
+                        product.ProductImages = new List<ProductImage>()
                        {
                            new ProductImage { ImageFullPath = ruta, Name=nameimg }
                        };
-                }
-
-                try
-                {
-                    _context.Add(product);
-                    await _context.SaveChangesAsync();
-                    _flashMessage.Confirmation("Registro creado.");
-                    return Json(new
-                    {
-                        isValid = true,
-                        html = ModalHelper.RenderRazorViewToString(this, "_ViewAllProducts", _context.Products
-                        .Include(p => p.ProductImages)
-                        .Include(p => p.ProductCategories)
-                        .ThenInclude(pc => pc.Category).ToList())
-                    });
-
-                }
-                catch (DbUpdateException dbUpdateException)
-                {
-                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                    {
-                        _flashMessage.Danger("Ya existe un producto con el mismo nombre.");
                     }
-                    else
+
+                    try
                     {
-                        _flashMessage.Danger(string.Empty, dbUpdateException.InnerException.Message);
+                        _context.Add(product);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Confirmation("Registro creado.");
+                        return Json(new
+                        {
+                            isValid = true,
+                            html = ModalHelper.RenderRazorViewToString(this, "_ViewAllProducts", _context.Products
+                            .Include(p => p.ProductImages)
+                            .Include(p => p.ProductCategories)
+                            .ThenInclude(pc => pc.Category).ToList())
+                        });
+
+                    }
+                    catch (DbUpdateException dbUpdateException)
+                    {
+                        if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                        {
+                            _flashMessage.Danger("Ya existe un producto con el mismo nombre.");
+                        }
+                        else
+                        {
+                            _flashMessage.Danger(string.Empty, dbUpdateException.InnerException.Message);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        _flashMessage.Danger(string.Empty, exception.Message);
                     }
                 }
-                catch (Exception exception)
-                {
-                    _flashMessage.Danger(string.Empty, exception.Message);
-                }
+               
             }
 
             model.Categories = await _combosHelper.GetComboCategoriesAsync();
@@ -319,60 +322,64 @@ namespace AleedTiendaShopping.Controllers
                     _flashMessage.Danger("la imagen debe ser tipo .jpg .gift .png .jpeg");
                    
 
-                    return View(model);
+                  
 
                 }
-               
-                Products product = await _context.Products
-                    .Include(c=>c.ProductImages)
-                    .FirstOrDefaultAsync(c=>c.Id==model.ProductId);
-                //almacenamiento foto
-                string ruta = "https://localhost:7116/images/noimage.png";
-                string path = "";
-                string pic = "";
-                if (model.ImageFile != null)
+                else
                 {
-                    
-                    pic = Path.GetFileName(product.Name.ToString() +product.ImagesNumber.ToString()+ ".png");
-
-                    path = Path.Combine("wwwroot\\images\\products", pic);
-                    ruta = "https://localhost:7116/images/products/" + pic;
-
-                    using (FileStream stream = new FileStream(path, FileMode.Create))
+                    Products product = await _context.Products
+                   .Include(c => c.ProductImages)
+                   .FirstOrDefaultAsync(c => c.Id == model.ProductId);
+                    //almacenamiento foto
+                    string ruta = "https://localhost:7116/images/noimage.png";
+                    string path = "";
+                    string pic = "";
+                    if (model.ImageFile != null)
                     {
-                        model.ImageFile.CopyTo(stream);
+
+                        pic = Path.GetFileName(product.Name.ToString() + product.ImagesNumber.ToString() + ".png");
+
+                        path = Path.Combine("wwwroot\\images\\products", pic);
+                        ruta = "https://localhost:7116/images/products/" + pic;
+
+                        using (FileStream stream = new FileStream(path, FileMode.Create))
+                        {
+                            model.ImageFile.CopyTo(stream);
+
+
+                        }
 
 
                     }
 
-
-                }
-
-                ProductImage productImage = new()
-                {
-                    Product = product,
-                    ImageFullPath = ruta,
-                    Name=pic,
-                };
-
-                try
-                {
-                    _context.Add(productImage);
-                    await _context.SaveChangesAsync();
-                    return Json(new
+                    ProductImage productImage = new()
                     {
-                        isValid = true,
-                        html = ModalHelper.RenderRazorViewToString(this, "Details", _context.Products
-                                       .Include(p => p.ProductImages)
-                                       .Include(p => p.ProductCategories)
-                                       .ThenInclude(pc => pc.Category)
-                                       .FirstOrDefaultAsync(p => p.Id == model.ProductId))
-                    });
+                        Product = product,
+                        ImageFullPath = ruta,
+                        Name = pic,
+                    };
+
+                    try
+                    {
+                        _context.Add(productImage);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info(" imagen agregada");
+                        return Json(new
+                        {
+                            isValid = true,
+                            html = ModalHelper.RenderRazorViewToString(this, "Details", _context.Products
+                                           .Include(p => p.ProductImages)
+                                           .Include(p => p.ProductCategories)
+                                           .ThenInclude(pc => pc.Category)
+                                           .FirstOrDefaultAsync(p => p.Id == model.ProductId))
+                        });
+                    }
+                    catch (Exception exception)
+                    {
+                        _flashMessage.Danger(string.Empty, exception.Message);
+                    }
                 }
-                catch (Exception exception)
-                {
-                    _flashMessage.Danger(string.Empty, exception.Message);
-                }
+               
             }
 
             return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddImage", model) });
@@ -466,6 +473,7 @@ namespace AleedTiendaShopping.Controllers
                 {
                     _context.Add(productCategory);
                     await _context.SaveChangesAsync();
+                    _flashMessage.Danger("Categoria agregada.");
                     return Json(new
                     {
                         isValid = true,

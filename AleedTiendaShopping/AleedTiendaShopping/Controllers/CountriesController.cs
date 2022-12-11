@@ -217,7 +217,7 @@ namespace AleedTiendaShopping.Controllers
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, "Ya existe un Departamento / Estado con el mismo nombre en este país.");
+                        _flashMessage.Danger("Ya existe un Departamento / Estado con el mismo nombre en este país.");
                     }
                     else
                     {
@@ -281,6 +281,7 @@ namespace AleedTiendaShopping.Controllers
                         .ThenInclude(s => s.Cities)
                         .FirstOrDefaultAsync(c => c.Id == model.CountryId);
                     await _context.SaveChangesAsync();
+                    _flashMessage.Info("Registro Actualizado.");
                     return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllStates", country) });
                 }
                 catch (DbUpdateException dbUpdateException)
@@ -400,6 +401,7 @@ namespace AleedTiendaShopping.Controllers
                     state = await _context.States
                         .Include(s => s.Cities)
                         .FirstOrDefaultAsync(c => c.Id == model.StateId);
+                    _flashMessage.Info("Registro Creado.");
                     return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllCities", state) });
                 }
                 catch (DbUpdateException dbUpdateException)
@@ -479,7 +481,7 @@ namespace AleedTiendaShopping.Controllers
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, "Ya existe una ciuad con el mismo nombre en este Departamento / Estado.");
+                        _flashMessage.Danger( "Ya existe una ciuad con el mismo nombre en este Departamento / Estado.");
                     }
                     else
                     {

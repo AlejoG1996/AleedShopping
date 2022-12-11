@@ -4,46 +4,74 @@
     ViewData["Title"] = "Cart";
 }
 
+    <link  rel="stylesheet" href="~/css/normalize.css"/>
+    
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+  
+  
+  
+ 
+<div class="row container__showcart">
+      <flash dismissable="true"  />
+    <div class="content__cart">
 
-<flash dismissable="true" />
-<div class="row">
-    <div class="col-md-4">
-        <dl class="row">
-            <dt class="col-sm-4">
+   
+   
+    <div class="col-md-3 info_pedido">
+        <dl class="row ">
+            <dt class=" info__titulo">
                 @Html.DisplayNameFor(model => model.Quantity)
             </dt>
-            <dd class="col-sm-8">
-                <h3>@Html.DisplayFor(model => model.Quantity)</h3>
+            <dd class=" info__subtitulo">
+                <p>@Html.DisplayFor(model => model.Quantity)</p>
             </dd>
-            <dt class="col-sm-4">
+            
+        </dl>
+         <dl class="row ">
+            
+            <dt class=" info__titulo">
                 @Html.DisplayNameFor(model => model.Value)
             </dt>
-            <dd class="col-sm-8">
-                <h3>@Html.DisplayFor(model => model.Value)</h3>
+            <dd class="info__subtitulo" >
+                <p>@Html.DisplayFor(model => model.Value)</p>
             </dd>
         </dl>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9 content_des">
             <div class="col-md-12">
+               
+                  
+
+                 
                 <form asp-action="ShowCart">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="Remarks" class="control-label"></label>
-                        <input asp-for="Remarks" class="form-control" />
-                        <span asp-validation-for="Remarks" class="text-danger"></span>
+                        
+                        
+                        <div class="input-field">
+
+                                <i class="fa-solid fa-message"></i>
+                                <textarea asp-for="Remarks" class="input__comentario" placeholder="Comentario" ></textarea>
+                         </div>
+                         <span asp-validation-for="Remarks" class="text-danger"></span>
                     </div>
                     <div class="form-group mt-2">
-                        <input type="submit" value="Confirmar Pedido" class="btn btn-outline-primary" />
-                        <a asp-action="Index" class="btn btn-outline-success">Regresar</a>
+                        <input type="submit" value="Confirmar Pedido" class="btn btn-outline-primary btn-confirmar " />
+                        <a onClick="history.go(-1);" class="btn btn-outline-success btn_backini ">Regresar</a>
                     </div>
                 </form>
             </div>
     </div>
+    </div>
 </div>
 
 
-<div class="row">
+<div class="row content_tableproduct">
     <div class="col-md-12">
+        
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Carro de Compras</h3>
@@ -88,7 +116,27 @@
                                     @Html.DisplayFor(modelItem => item.Product.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                    @{
+                    if (item.Remarks != null)
+                    {
+                        string[] noteWords = item.Remarks.Split(' ');
+                        if (noteWords.Count() > 7)
+                        {
+                            <a class="" role="button" data-bs-toggle="collapse" href="#collapseSum@(item.Id)" aria-expanded="false" aria-controls="collapseSum@(item.Id)">
+                                @(string.Join(" ", noteWords.Take(7)) + "...")
+                            </a>
+                            <div class="collapse" id="collapseSum@(item.Id)">
+                                <div class="card card-body bg-light">
+                                    @(string.Join(" ", noteWords.Skip(7)))
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Remarks);
+                        }
+                    }
+                }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Product.Price)
@@ -105,9 +153,13 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Value)
                                 </td>
+
                                 <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Editar</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Borrar</a>
+@*                                   
+*@                                <a onclick="showInPopup('@Url.Action("Edit", "Home", new { id = item.Id }, Context.Request.Scheme)' , 'Editar')" class="btn btn-outline-warning"><i class="fa-solid fa-pencil"></i></a>
+                                    <partial name="_ProducDialog" />
+                                    <partial name="_DeleteDialog" />
+                                     <button data-id="@item.Id" class="btn btn-outline-danger deleteItem" data-bs-toggle="modal" data-bs-target="#deleteDialog"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
                         }
@@ -121,7 +173,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     
-
+    <script src="~/js/showmodal.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
@@ -134,5 +186,8 @@
                 ]
             });
         });
+    </script>
+    <script>
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Home/Delete/', false);
     </script>
 }

@@ -16,7 +16,7 @@
 
 
 
-<flash dismissable="true" />
+
 <!-- ------------------------------------------------------ MENU  ---------------------------------------------------------------------------------->
 <header class="hero">
     <div class="hero__content" id="menu">
@@ -36,8 +36,11 @@
            <li class="nav__items">
                <a href="#Ventas" class="nav__links">Comprar</a>
            </li> 
+            <li class="nav__items">
+               <a class="nav__links separd" asp-area="" asp-controller="Account" asp-action="Register"   target="_blank"  >Registrarse</a>
+           </li>
            <li class="nav__items">
-               <a class="nav__links separd" asp-area="" asp-controller="Account" asp-action="Login">Iniciar Sesión</a>
+               <a class="nav__links separd" asp-area="" asp-controller="Account" asp-action="Login"   target="_blank"    >Iniciar Sesión</a>
            </li> 
 
            
@@ -214,11 +217,10 @@
 
 
 <div class="contentenedor__carro">
-    @if (Model.Quantity > 0)
-    {
+    
               
-          <a asp-action="ShowCart" class="btn_carro_compra"><i class="fa-solid fa-cart-shopping"></i>Ver Carro de Compras (@Model.Quantity)</a>
-    }
+          <a asp-action="ShowCart" class="btn_carro_compra"><i class="fa-solid fa-cart-shopping svg_carro"></i>Ver Carro de Compras (@Model.Quantity)</a>
+    
 </div>
 
 
@@ -245,8 +247,10 @@
                                         <span class="price_num">@Html.DisplayFor(modelItem => item.Price)</span>
                     </div>
                     <div class="card-footer text-center">
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn_details">Detalles</a>
-                        <a asp-action="Add" asp-route-id="@item.Id" class="btn btn-sm btn_add">Add to Cart</a>
+                          <a onclick="showInPopup('@Url.Action("Details", "Home", new { id = item.Id }, Context.Request.Scheme)' , 'Detalle Producto')" class="btn btn-sm  btn_details">Detalle</a>
+                  
+                         <a onclick="showInPopup('@Url.Action("Buy", "Home", new { id = item.Id }, Context.Request.Scheme)' , 'Comprar Producto')" class="btn btn-sm btn_add">Comprar</a>
+                         <partial name="_ProducDialog" />
                     </div>
                 </div>
             
@@ -283,15 +287,16 @@
 <div class="footer-basic">
         <footer>
             <div class="social">
-                <a href="https://www.instagram.com/aleed.tiendadesentimientos/?hl=es-la"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://api.whatsapp.com/send?phone=573195605554&text=Hola!%20Quiero%20Comprar%20un%20regalo%F0%9F%8E%81%F0%9F%8E%81%F0%9F%8E%81"><i class="fa-brands fa-whatsapp"></i></i></a>
-                <a href="https://www.facebook.com/people/Aleed-tienda-de-sentimientos/100064868476103/"><i class="fa-brands fa-facebook"></i></i></a>
+                <a href="https://www.instagram.com/aleed.tiendadesentimientos/?hl=es-la" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=573195605554&text=Hola!%20Quiero%20Comprar%20un%20regalo%F0%9F%8E%81%F0%9F%8E%81%F0%9F%8E%81" target="_blank"><i class="fa-brands fa-whatsapp"></i></i></a>
+                <a href="https://www.facebook.com/people/Aleed-tienda-de-sentimientos/100064868476103/" target="_blank"><i class="fa-brands fa-facebook"></i></i></a>
             </div>
             <div class="list-inline">
                  <p class="text__focus">ALEED - TIENDA DE SENTIMIENTOS </p>            
                 <p>Hay detalles  que roban sonrisas  e invaden  el corazón. Y con Aleed tienda de sentimientos, seguro que lo encuentras.  </p>            
             <p class="copyright">Alejandro Galeano © 2022 -  &copy;  <a class="privacy-pol" asp-area="" asp-controller="Home" asp-action="Privacy">Políticas de Privacidad</a></p>
             </div>
+            
         </footer>
     </div>
 <script src="~/js/categoriesslider.js"></script>
@@ -302,6 +307,16 @@
 <script src=".//js/MenuResponsive.js"></script> 
 <script src=".//js/swiper-bundle.min.js"></script>
 <script src=".//js/script.js"></script>
+<script src="~/js/showmodal.js"></script>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jasny/jasny-bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/lib/font-awesome/js/all.min.js"></script>
 
 @section Scripts {
     @{

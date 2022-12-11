@@ -3,32 +3,240 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Editar</h2>
-<flash dismissable="true" />
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="ChangeUser" enctype="multipart/form-data">
+<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+ <link  rel="stylesheet" href="~/css/AdminStyle.css"/>
+ 
+    <link  rel="stylesheet" href="~/css/normalize.css"/>
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+   <link rel="stylesheet" href="~/css/LoginStyle.css" />
+
+<style>
+    .form-register__header{
+    max-width:700px!important;
+    width:100%;
+
+
+}
+.form-register__body {
+    display: flex;
+    align-items: flex-start;
+    max-width: 700px !important;
+    width: 100%;
+}
+
+  .input-field {
+            max-width: 700px !important;}
+
+             .content__error{
+        width:100% !important;
+        max-width:480px !important;
+    }
+
+    .form-register__header{
+          width:100% !important;
+        max-width:700px !important;
+    }
+
+    .necesary{
+        color:#538FFB;
+    }
+   
+    .panels-container{
+         width:100% !important;
+         margin:0!important;
+          padding:0!important;
+          max-width:100% !important;
+    }
+
+     .container_login{
+          width:100% !important;
+         
+     }
+
+      .input-field {
+
+
+        border-radius: 5px !important;
+
+
+    }
+
+    .step__button {
+    
+    background-color: #538FFB;
+   
+}
+      .progressbar__option.active:before, .progressbar__option.active:after {
+        background-color: #538FFB !important;
+        color:#fff;
+    }
+    #custom-button{
+    
+    display:none;
+    }
+    .btns_final{
+        margin:auto;
+        margin-top: 45px !important;
+    }
+
+    .inpimg{
+           margin:auto;
+        margin-top: 45px !important;
+    }
+</style>
+
+<div class="container__infoprocess">
+    <flash dismissable="true" />
+</div>
+
+
+<div class="container__tableCate">
+    <div class="">
+        <form asp-action="ChangeUser" enctype="multipart/form-data" class="sign-in-form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ImageFullPath" />
+             <input type="hidden" asp-for="Id" />
+           
             <input type="hidden" asp-for="Countries" />
             <input type="hidden" asp-for="States" />
             <input type="hidden" asp-for="Cities" />
+            <input type="hidden" asp-for="ImageFullPath" />
 
-            <partial name="_User" />
+            <h2 class="title">Mi Informacion</h2>
+                <!--section bar-->
+                <div class="form-register__header">
+                    <ul class="progressbar">
 
-            <div class="form-group mt-2">
-                <input type="submit" value="Guardar" class="btn btn-outline-primary" />
-                <a asp-action="ChangePassword" class="btn btn-outline-secondary">Cambiar Contraseña</a>
-            </div>
+                        <li class="progressbar__option active">Personal</li>
+                        <li class="progressbar__option">Ubicación</li>
+                        <li class="progressbar__option">Foto</li>
+                    </ul>
+                </div>
+                <div class="content__error">
+                    <flash dismissable="true" />
+
+                </div>
+                <div class="form-register__body">
+                    <div class="step active" id="step-1">
+                        <div class="step__body">
+                             <div class="input-field">
+
+                                <i class="fa-solid fa-id-card"></i>
+                                <input asp-for="Document" class=""  />
+                            </div>
+                            <span asp-validation-for="Document" class="text-danger text__error"></span>
+
+                             <div class="input-field">
+
+                                <i class="fa-solid fa-person"></i>
+                                <input asp-for="FirstName" class="" placeholder="Nombres" />
+                            </div>
+                            <span asp-validation-for="FirstName" class="text-danger text__error"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-person"></i>
+                                <input asp-for="LastName" class="" placeholder="Apellidos" />
+                            </div>
+                            <span asp-validation-for="LastName" class="text-danger text__error"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-mobile"></i>
+                                <input asp-for="PhoneNumber" class="" placeholder="Telefono" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger text__error"></span>
+                            <p class="necesary">*Todos los campos son necesarios</p>
+
+                        </div>
+                        <div class="step__footer">
+                            <button type="button" class="step__button step__button--next" data-to_step="2" data-step="1" style=" float: right !important;">Siguiente</button>
+                        </div>
+                    </div>
+                    <div class="step" id="step-2">
+
+
+                        <div class="step__body">
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <input asp-for="Address" class="" placeholder="Dirección" />
+
+                            </div>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-earth-americas"></i>
+
+                                <select asp-for="CountryId" asp-items="Model.Countries" class=""></select>
+                            </div>
+                            <span asp-validation-for="CountryId" class="text-danger"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-mountain-sun"></i>
+
+                                <select asp-for="StateId" asp-items="Model.States" class=""></select>
+                            </div>
+                            <span asp-validation-for="StateId" class="text-danger"></span>
+
+                            <div class="input-field">
+
+                                <i class="fa-solid fa-building"></i>
+
+                                <select asp-for="CityId" asp-items="Model.Cities" class=""></select>
+                            </div>
+                            <span asp-validation-for="CityId" class="text-danger"></span>
+
+                            <p class="necesary">*Todos los campos son necesarios</p>
+
+                        </div>
+                                                
+
+                        <div class="step__footer">
+                            <button type="button" class="step__button step__button--back" data-to_step="1" data-step="2">Regresar</button>
+                            <button type="button" class="step__button step__button--next" data-to_step="3" data-step="2">Siguiente</button>
+                        </div>
+                    </div>
+                                        <div class="step" id="step-3">
+
+                        <div class="step__body">
+                             
+                <div class="viewphoto">
+                       <img id="imagenPrevisualizacion" src="@Model.ImageFullPath" style="width:200px;height:200px;border-radius:50%"  />
+                      <button type="button" id="custom-button"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+                      
+                </div>
+                  <div class="step__footer btns_final">
+                       <input asp-for="ImageFile" class="form-control" type="file" id="real-file"  accept="image/*"  />
+                  </div>
+                          
+                          
+
+                        <div class="step__footer btns_final">
+                            <button type="button" class="step__button step__button--back" data-to_step="2" data-step="3">Regresar</button>
+                            <button type="submit" class="step__button">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+
+
+            
         </form>
     </div>
-    <div class="col-md-4 zoom">
-        <img src="@Model.ImageFullPath" style="width:200px;height:200px;border-radius:50%" />
-    </div>
+   
 </div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jasny/jasny-bootstrap.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+
+<script src="~/js/scripts.js"></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -82,5 +290,53 @@
                 return false;
             })
         });
+
+
+         const realFileBtn = document.getElementById("real-file");
+                        const customBtn = document.getElementById("custom-button");
+                        const customTxt = document.getElementById("custom-text");
+                        var img = document.getElementById("imagenPrevisualizacion");
+
+                        customBtn.addEventListener("click", function () {
+                            realFileBtn.click();
+                        });
+
+                        realFileBtn.addEventListener("change", function () {
+                            if (realFileBtn.value) {
+                                customTxt.innerHTML = realFileBtn.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+                            } else {
+                                customTxt.innerHTML = "No se ha cargado ninguna imagen";
+                            }
+                        })
+
+                        const $seleccionArchivos = document.querySelector("#real-file"),
+                            $imagenPrevisualizacion = document.querySelector("#imagenPrevisualizacion");
+
+                        // Escuchar cuando cambie
+                        $seleccionArchivos.addEventListener("change", () => {
+                            // Los archivos seleccionados, pueden ser muchos o uno
+                            const archivos = $seleccionArchivos.files;
+                            // Si no hay archivos salimos de la función y quitamos la imagen
+                            if (!archivos || !archivos.length) {
+                                $imagenPrevisualizacion.src = "";
+                                return;
+                            }
+
+
+                            var filePath = realFileBtn.value;
+                            var allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
+                            if (!allowedExtensions.exec(filePath)) {
+
+
+
+                            } else {
+                                // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+                                const primerArchivo = archivos[0];
+                                // Lo convertimos a un objeto de tipo objectURL
+                                const objectURL = URL.createObjectURL(primerArchivo);
+                                // Y a la fuente de la imagen le ponemos el objectURL
+                                $imagenPrevisualizacion.src = objectURL;
+                            }
+                        });
     </script>
 }

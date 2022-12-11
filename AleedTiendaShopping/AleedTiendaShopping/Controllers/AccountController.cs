@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 using Vereyon.Web;
+using static AleedTiendaShopping.Helpers.ModalHelper;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace AleedTiendaShopping.Controllers
@@ -43,7 +44,7 @@ namespace AleedTiendaShopping.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Inicio", "Home");
             }
 
             return View(new LoginViewModel());
@@ -57,7 +58,7 @@ namespace AleedTiendaShopping.Controllers
                 SignInResult result = await _userHelper.LoginAsync(model);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Inicio", "Home");
                 }
 
                 if (result.IsLockedOut)
@@ -210,13 +211,23 @@ namespace AleedTiendaShopping.Controllers
                 Response response = _mailHelper.SendMail(
                     $"{model.FirstName} {model.LastName}",
                     model.Username,
-                    "Shopping - Confirmación de Email",
-                    $"<h1>Shopping - Confirmación de Email</h1>" +
-                        $"Para habilitar el usuario por favor hacer click en el siguiente link:, " +
-                        $"<hr></br></br><p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
+                    "Aleed tienda de sentimientos  - Confirmación de Email",
+                     $"<h1 style='background:#4070F4 !important; color:#fff; width:100%; text-align:center; height:40px; margin:auto; padding:15px;'>Aleed tienda de sentimientos - Confirmación de Email</h1>" +
+                    $"<div style='background:#333; color:#fff; width:100%; height:300px;margin:auto;padding:15px; '>" +
+                        $" <h3 style='color:#fff; text-align:center; width:100%;'>Para habilitar el usuario por favor hacer click en el siguiente link:</h3> " +
+                        $"<br>" +
+                        $"<a  href = \"{tokenLink}\"  style='background:#4070F4 !important; color:#fff; text-align:center !important;border-radius:8px !important; width:150px !important; height:40px !important; margin:auto !important;  align-content:center !important; align-items:center !important; display:flex !important; padding-left:32px !important; text-decoration:none!important; padding-top:8px !important; font-size:18px!important;'>Confirmar Email</a>" +
+                   $"</div>") ;
+                       
+                       
+                    
+                        
                 if (response.IsSuccess)
                 {
                     _flashMessage.Info("Usuario registrado. Para poder ingresar al sistema, siga las instrucciones que han sido enviadas a su correo.");
+                    model.Countries = await _combosHelper.GetComboCountriesAsync();
+                    model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
+                    model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
                     return View(model);
                 }
 
@@ -380,7 +391,11 @@ namespace AleedTiendaShopping.Controllers
                 user.Document = model.Document;
 
                 await _userHelper.UpdateUserAsync(user);
-                return RedirectToAction("Index", "Home");
+                _flashMessage.Info("Información actualizada");
+                model.Countries = await _combosHelper.GetComboCountriesAsync();
+                model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
+                model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
+                return View(model);
             }
 
             model.Countries = await _combosHelper.GetComboCountriesAsync();
@@ -411,7 +426,8 @@ namespace AleedTiendaShopping.Controllers
                     IdentityResult? result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("ChangeUser");
+                        _flashMessage.Info("Se realizo el cambio correctamente.");
+                        return View();
                     }
                     else
                     {
@@ -451,11 +467,14 @@ namespace AleedTiendaShopping.Controllers
             return View();
         }
 
+        [NoDirectAccess]
         public IActionResult RecoverPassword()
         {
             return View();
         }
 
+
+        [NoDirectAccess]
         [HttpPost]
         public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
         {
@@ -477,10 +496,15 @@ namespace AleedTiendaShopping.Controllers
                 _mailHelper.SendMail(
                     $"{user.FullName}",
                     model.Email,
-                    "Shopping - Recuperación de Contraseña",
-                    $"<h1>Shopping - Recuperación de Contraseña</h1>" +
-                    $"Para recuperar la contraseña haga click en el siguiente enlace:" +
-                    $"<p><a href = \"{link}\">Reset Password</a></p>");
+                     "Aleed tienda de sentimientos  - Recuperación de Contraseña",
+                     $"<h1 style='background:#7f3980 !important; color:#fff; width:100%; text-align:center; height:40px; margin:auto; padding:15px;'>Aleed tienda de sentimientos -Recuperación de Contraseña</h1>" +
+                    $"<div style='background:#333; color:#fff; width:100%; height:300px;margin:auto;padding:15px; '>" +
+                        $" <h3 style='color:#fff; text-align:center; width:100%;'>Para recuperar la contraseña haga click en el siguiente enlace:</h3> " +
+                        $"<br>" +
+                        $"<a  href = \"{link}\"  style='background:#7f3980 !important; color:#fff; text-align:center !important;border-radius:8px !important; width:150px !important; height:40px !important; margin:auto !important;  align-content:center !important; align-items:center !important; display:flex !important; padding-left:32px !important;' text-decoration:none!important; padding-top:8px !important; font-size:18px!important;'>Recuperar Contraseña</a>" +
+                   $"</div>");
+
+     
                 _flashMessage.Info("Las instrucciones para recuperar la contraseña han sido enviadas a su correo.");
 
               

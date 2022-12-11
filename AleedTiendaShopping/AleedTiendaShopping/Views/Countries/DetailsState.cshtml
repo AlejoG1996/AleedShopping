@@ -4,23 +4,37 @@
     ViewData["Title"] = "Details";
 }
 
-<flash dismissable="true" />
+<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+ <link  rel="stylesheet" href="~/css/AdminStyle.css"/>
+ 
+    <link  rel="stylesheet" href="~/css/normalize.css"/>
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-<h1>Detalles</h1>
-
-<div>
-    <partial name="_StateDetails" />    
+<div class="container__infoprocess">
+    <flash dismissable="true" />
 </div>
 
-<div>
+
+<div class="container__card-pais">
+    <div class="info-pais">
+    <partial name="_StateDetails" />   
+   </div>
+   <div class="info-pais_btn ">
     <a asp-action="Details" asp-route-id="@Model?.Country.Id" class="btn btn-outline-success"><i class="fa-solid fa-arrow-rotate-left"></i> Regresar</a>
+   </div>
 </div>
-<hr />
+
+
+
+
 
 <!-- Content Wrapper. Contains page content -->
-<div class="container-fluid">
+<div class="container__tableDepa">
     <div class="card mt-2">
-        <div class="card-header text-danger">
+        <div class="card-header text-purple">
             <i class="fa fa-globe"></i>  <strong>Ciudades</strong>
         </div>
         <div class="card-body">

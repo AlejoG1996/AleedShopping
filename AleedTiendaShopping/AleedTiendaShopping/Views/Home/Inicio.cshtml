@@ -1,0 +1,296 @@
+﻿@model AleedTiendaShopping.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+   <link  rel="stylesheet" href="~/css/normalize.css"/>
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/HomeStyle.css"/>
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+   <style>
+        .container{
+        width:100% !important;
+         margin:0!important;
+          padding:0!important;
+                    max-width:100% !important;
+
+
+    }
+
+  
+    .containers {
+    width: 90% !important;
+    max-width: 1200px;
+    margin: 0 auto !important;
+    overflow: hidden;
+    padding: var(--padding-container) !important;
+}
+    main{
+        padding-top:40px!important;
+       
+    }
+
+    .about{
+         padding-bottom: 100px!important;
+    }
+
+    #Categorias{
+        padding-top:150px!important;
+
+    }
+   </style>
+
+
+
+
+<!-- ------------------------------------------------------ CATEGORIAS  ---------------------------------------------------------------------------------->
+
+<main id="Categorias">
+    <section class="container about">
+        <h2 class="subtitle">Nuestras Categorias</h2>
+        <p class="about__paragraph">En Aleed Tienda de Sentimiento encuentra productos relacionados con:</p>
+
+        <div class="about__main">
+            <div class="slide-container swiper">
+                <div class="slide-content">
+                    <div class="card-wrapper swiper-wrapper">
+
+                        <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Accesorios"})">
+                                <img  src="~/images/accesorios.png" class="card-content__image" alt="Accesorios"/>
+                                <h2 class="name">Accesorios</h2>
+                            </a>
+                        </div>
+
+                         <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Bebidas"})">
+                                <img  src="~/images/bebidas.png" class="card-content__image" alt="Bebidas"/>
+                                <h2 class="name">Bebidas</h2>
+                            </a>
+                        </div>
+
+                         <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Belleza"})">
+                                <img  src="~/images/belleza.png" class="card-content__image" alt="Belleza"/>
+                                <h2 class="name">Belleza</h2>
+                            </a>
+                        </div>
+
+                        <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Bolsas"})">
+                                <img  src="~/images/bolsas.png" class="card-content__image" alt="Bolsas"/>
+                                <h2 class="name">Bolsas</h2>
+                            </a>
+                        </div>
+
+                         <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Decoración"})">
+                                <img  src="~/images/decoracion.png" class="card-content__image" alt="Decoración"/>
+                                <h2 class="name">Decoración</h2>
+                            </a>
+                        </div>
+
+                        <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Dulces"})">
+                                <img  src="~/images/dulces.png" class="card-content__image" alt="Dulces"/>
+                                <h2 class="name">Dulces</h2>
+                            </a>
+                        </div>
+
+                        <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Empaques"})">
+                                <img  src="~/images/empaques.png" class="card-content__image" alt="Empaques"/>
+                                <h2 class="name">Empaques</h2>
+                            </a>
+                        </div>
+
+                         <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Flores"})">
+                                <img  src="~/images/flores.png" class="card-content__image" alt="Flores"/>
+                                <h2 class="name">Flores</h2>
+                            </a>
+                        </div>
+
+                        <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Globos"})">
+                                <img  src="~/images/globos.png" class="card-content__image" alt="Globos"/>
+                                <h2 class="name">Globos</h2>
+                            </a>
+                        </div>
+
+                         <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Papeles"})">
+                                <img  src="~/images/papeles.png" class="card-content__image" alt="Papeles"/>
+                                <h2 class="name">Papeles</h2>
+                            </a>
+                        </div>
+
+                         <div class="cardtwho swiper-slide">
+                             <a class="card-content" href="@Url.Action("Inicio", "Home", new { searchString = "Peluches"})">
+                                <img  src="~/images/peluche.png" class="card-content__image" alt="Peluches"/>
+                                <h2 class="name">Peluches</h2>
+                            </a>
+                         </div>
+
+                         <div class="cardtwho swiper-slide">
+                            <a class="card-content" asp-action="Inicio" asp-route-sortOrder="@ViewData["NameSortParm"]">
+                                <img  src="~/images/alfabeto.png" class="card-content__image" alt="nombre"/>
+                                <h2 class="name">Ordenar Alfabeticamente</h2>
+                            </a>
+                        </div>
+
+                        <div class="cardtwho swiper-slide">
+                            <a class="card-content" asp-action="Inicio" asp-route-sortOrder="@ViewData["PriceSortParm"]">
+                                <img  src="~/images/numerico.png" class="card-content__image" alt="precio"/>
+                                <h2 class="name">Ordenar Por Precio</h2>
+                            </a>
+                         </div>
+
+                    </div>
+                </div>
+
+             <div class="swiper-button-next swiper-navBtn"></div>
+            <div class="swiper-button-prev swiper-navBtn"></div>
+           
+            <div class="swiper-pagination"></div>
+            </div>
+            
+             
+        </div>
+        
+    </section>
+
+    <!-- ------------------------------------------------------ BUSQUEDA  ---------------------------------------------------------------------------------->
+
+    <section class="knowledge" id="Ventas">
+        <div class="knowledge__container containers">
+            <div class="knowledege__texts">
+                <h2 class="subtitle sub__dos">¡ Encuentra el regalo perfecto  !</h2>
+                 <p class="knowledge__paragraph">Busca aquí productos, regalos, o categorías  que se ajustan a la perfección a tus necesidades</p>
+                 <form asp-action="Inicio" method="get" class="form__buscar">
+                     <div class="form-actions no-color">
+                         <p>
+                             <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]"  class="inpu__buscar" placeholder="buscar"/>
+                         </p>
+                     </div>
+                      <input type="submit" value="Buscar" class="cta btn__buscar"  />
+                       <a asp-action="Inicio" class="cta btn__buscar">Ver Todos los Productos</a>
+                 </form> 
+                 @if (Model.Products.Count() <= 0)
+                         {
+                                          <h2 class="text_error">  ¡ No hay productos con su criterio de búsqueda !</h2>
+
+                          }
+             </div>
+             <figure class="knowledge__picture">
+                    <img src="~/images/imagenbusqueda.png" class="knowledge__img" alt="busqueda">
+              </figure>
+        </div>
+    </section>
+   
+</main>
+
+
+
+
+
+
+    <!-- ------------------------------------------------------ Btn Compras  ---------------------------------------------------------------------------------->
+
+
+<div class="contentenedor__carro">
+  
+              
+          <a asp-action="ShowCart" class="btn_carro_compra"><i class="fa-solid fa-cart-shopping svg_carro"></i>Ver Carro de Compras (@Model.Quantity)</a>
+    
+</div>
+
+
+    <!-- ------------------------------------------------------ productos  ---------------------------------------------------------------------------------->
+
+<div class="container__products">
+
+    @if (Model.Products.Count() > 0)
+    {
+        @foreach (var item in Model.Products)
+        {
+            
+                <div class="card ">
+                  <div class="content__imageproduct">
+                         <img src="@item.ImageFullPath"  class="image_product zoom" alt=@item.Name />                                
+                   </div>
+                   <div class="product__info">
+                               <span class="shoe_name">@item.Name</span>
+                               <p>@item.Description</p>
+                                                            
+                     </div>
+
+                    <div class="product__price">
+                                        <span class="price_num">@Html.DisplayFor(modelItem => item.Price)</span>
+                    </div>
+                    <div class="card-footer text-center">
+                          <a onclick="showInPopup('@Url.Action("Details", "Home", new { id = item.Id }, Context.Request.Scheme)' , 'Detalle Producto')" class="btn btn-sm  btn_details">Detalle</a>
+                  
+                         <a onclick="showInPopup('@Url.Action("Buy", "Home", new { id = item.Id }, Context.Request.Scheme)' , 'Comprar Producto')" class="btn btn-sm btn_add">Comprar</a>
+                         <partial name="_ProducDialog" />
+                    </div>
+                </div>
+            
+        }
+    }
+    
+
+</div>
+@{
+    var prevDisabled = !Model.Products.HasPreviousPage ? "disabled ocultar" : "";
+    var nextDisabled = !Model.Products.HasNextPage ? "disabled ocultar" : "";
+}
+
+<div class="container_pagination">
+    
+    <a asp-action="Inicio"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.Products.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn-next @nextDisabled">
+        Siguiente
+    </a>
+    <a asp-action="Inicio"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.Products.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class=" btn-back @prevDisabled">
+        Anterior
+    </a>
+</div>
+
+
+<script src="~/js/categoriesslider.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="~/js/MenuResponsive.js"></script> 
+<script src="~/js/swiper-bundle.min.js"></script>
+<script src="~/js/script.js"></script>
+<script src="~/js/showmodal.js"></script>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jasny/jasny-bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/lib/font-awesome/js/all.min.js"></script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

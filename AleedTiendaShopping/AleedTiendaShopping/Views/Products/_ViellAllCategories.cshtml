@@ -11,7 +11,7 @@
                 @Html.DisplayNameFor(model => model.ProductCategories.FirstOrDefault().Category.Name)
             </th>
             <th>
-                <a onclick="showInPopup('@Url.Action("AddCategory", "Products", new { Id = Model.Id }, Context.Request.Scheme)' , 'Nueva Categoría')" class="btn btn-sm btn-primary text-white"><i class="fa fa-plus-circle"></i> Categoría</a>
+                <a onclick="showInPopup('@Url.Action("AddCategory", "Products", new { Id = Model.Id }, Context.Request.Scheme)' , 'Nueva Categoría')" class="btn btn-sm btn-primary text-white btn_new"><i class="fa fa-plus-circle"></i> Categoría</a>
             </th>
         </tr>
     </thead>
@@ -23,7 +23,7 @@
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
-                <button data-id="@item.Id" class="btn btn-sm btn-danger deleteItem2" data-bs-toggle="modal" data-bs-target="#deleteDialog"><i class="fa fa-trash"></i></button>
+                <button data-id="@item.Id" class="btn btn-sm btn-danger deleteItem2 btn__supr" data-bs-toggle="modal" data-bs-target="#deleteDialog"><i class="fa fa-trash"></i></button>
             </td>
         </tr>
         }

@@ -42,5 +42,6 @@ namespace AleedTiendaShopping.Models
         [Display(Name = "Comentarios")]
         public string? Remarks { get; set; }
 
+        public List<Products> prod { get; set; }
     }
 }

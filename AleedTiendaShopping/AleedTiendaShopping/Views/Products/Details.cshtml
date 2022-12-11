@@ -4,25 +4,40 @@
     ViewData["Title"] = "Details";
 }
 
-<flash dismissable="true" />
+ <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+ <link  rel="stylesheet" href="~/css/AdminStyle.css"/>
+ 
+    <link  rel="stylesheet" href="~/css/normalize.css"/>
+   <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+   <link  rel="stylesheet" href="~/css/swiper-bundle.min.css"/>
+   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-<h1>Detalles</h1>
-
-<div>
-    <partial name="_ProductDetails" />    
+<div class="container__infoprocess">
+    <flash dismissable="true" />
 </div>
 
-<div>
+
+<div class="container__card-productd">
+    
+    <div class="info-prd">
+    <partial name="_ProductDetails" />     
+   </div>
+   <div class="">
     <a asp-action="Index" class="btn btn-outline-success"><i class="fa-solid fa-arrow-rotate-left"></i> Regresar</a>
+   </div>
 </div>
-<hr />
+
+
+
 
 <!-- Content Wrapper. Contains page content -->
+<div class="content_tbls">
 <div class="row">
     <div class="col-md-6">
         <div class="container-fluid">
             <div class="card mt-2">
-                <div class="card-header text-danger">
+                <div class="card-header  text-purple">
                     <i class="fa fa-file-image"></i>  <strong>Imágenes</strong>
                 </div>
                 <div class="card-body">
@@ -36,7 +51,7 @@
     <div class="col-md-6">
         <div class="container-fluid">
             <div class="card mt-2">
-                <div class="card-header text-danger">
+                <div class="card-header  text-purple">
                     <i class="fa fa-object-group"></i>  <strong>Categorías</strong>
                 </div>
                 <div class="card-body">
@@ -48,12 +63,12 @@
         </div>
     </div>
 </div>
-
+</div>
 <!--modal placeholder. Also you can place this modal form in the _Layout.cshtml-->
 <div class="modal fade in" tabindex="-1" role="dialog" data-bs-backdrop="static" id="form-modal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-primary">
+            <div class="modal-header header__color ">
                 <h5 class="modal-title text-white"></h5>
                 <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">                   
                 </button>

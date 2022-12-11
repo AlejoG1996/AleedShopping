@@ -5,11 +5,12 @@
     Layout = null;
 }
 
-<flash dismissable="true" />
+ <flash dismissable="true" />
 
-<div class="container smfont">
+
+<div class="container smfont content_create">
     <form asp-action="Create" enctype="multipart/form-data" autocomplete="off" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
-        <div class="box-body">
+        <div class="box-body mb-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Categories" />
             <partial name="_CreateProduct"/>

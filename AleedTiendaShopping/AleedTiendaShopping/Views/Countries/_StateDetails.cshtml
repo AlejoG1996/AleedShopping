@@ -1,19 +1,24 @@
 ﻿@model AleedTiendaShopping.Data.Entities.State
 
- <h4>Departamento/Estado</h4>
-    <hr />
+ 
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-12 info__titulo">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-12 info__subtitulo">
             @Html.DisplayFor(model => model.Name)
         </dd>
 
-        <dt class = "col-sm-2">
+       
+    </dl>
+
+      <dl class="row">
+        
+
+        <dt class = "col-sm-12 info__titulo">
             @Html.DisplayNameFor(model => model.CitiesNumber)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-12 info__subtitulo">
             @Html.DisplayFor(model => model.CitiesNumber)
         </dd>
     </dl>
